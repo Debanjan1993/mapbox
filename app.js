@@ -16,12 +16,29 @@ async function initMap() {
     map.addControl(new mapboxgl.NavigationControl());
 
     map.once("load", function() {
-        data.forEach(marker => {
+        data.map(marker => {
             const el = stylingMarker(marker);
             new mapboxgl.Marker(el)
                 .setLngLat([marker.countryInfo.long, marker.countryInfo.lat])
                 .addTo(map);
         })
+
+        const markers = Array.from(document.querySelectorAll('.marker'));
+        markers.forEach(marker => {
+            marker.addEventListener('click', () => {
+                const popup = marker.childNodes[0];
+                popup.style.visibility = 'visible';
+                markerVisibility('hidden');
+
+                setTimeout(function() {
+                    popup.style.visibility = "hidden";
+                    markerVisibility('visible');
+
+                }, 2500);
+            });
+        })
+
+
     })
 
     function stylingMarker(marker) {
@@ -30,7 +47,7 @@ async function initMap() {
         if (marker.todayCases > 100000) {
             el.style.width = '100px';
             el.style.height = '100px';
-            el.style.backgroundColor = ' #660000';
+            el.style.backgroundColor = '#660000';
             el.style.opacity = 0.7;
         } else if (marker.todayCases > 50000 && marker.todayCases < 100000) {
             el.style.width = '75px';
@@ -56,16 +73,20 @@ async function initMap() {
         <p>Deaths Today: <b>${marker.todayDeaths}</b></p><hr>
         <p>Recovered Today: <b>${marker.todayRecovered}</b></p>`
         el.appendChild(popupel);
-        const popup = el.querySelector('.popup')
-        el.addEventListener('click', () => {
-            popup.style.visibility = 'visible';
-            setTimeout(function() {
-                popup.style.visibility = "hidden";
-            }, 3000);
-        })
-
         return el;
     }
 }
+
+function markerVisibility(status) {
+    const innermarkers = Array.from(document.querySelectorAll('.marker')).forEach(
+        inmk =>
+        inmk.style.visibility = status
+    );
+}
+
+
+
+
+
 
 initMap();

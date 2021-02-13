@@ -7,6 +7,14 @@ body {
     height: 100vh;
 }
 
+.title {
+    padding: 0.5rem;
+    font-size: 30px;
+    text-align: center;
+    background: #E8F1F7;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
 .marker {
     cursor: pointer;
     padding: 0;
